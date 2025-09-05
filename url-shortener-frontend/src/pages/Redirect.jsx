@@ -5,20 +5,26 @@ import axios from 'axios'
 export default function Redirect() {
   const { code } = useParams()
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
   const api = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
 
   useEffect(() => {
     const redirect = async () => {
       try {
-        // Call backend API to get the original URL and track the click
-        const response = await axios.get(`${api}/api/urls/redirect/${code}`)
+        setLoading(true)
+        // Get the original URL from backend without triggering click tracking
+        const response = await axios.get(`${api}/api/urls/info/${code}`)
         if (response.data.originalUrl) {
-          // Redirect to the original URL
-          window.location.href = response.data.originalUrl
+          // Now redirect to the backend route that will track the click and redirect
+          window.location.href = `${api}/${code}`
+        } else {
+          setError('Short URL not found')
         }
       } catch (error) {
         console.error('Redirect error:', error)
         setError('Short URL not found')
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -29,26 +35,34 @@ export default function Redirect() {
 
   if (error) {
     return (
-      <div className="max-w-md mx-auto mt-12 bg-white p-6 rounded shadow text-center">
-        <h2 className="text-2xl font-semibold mb-4 text-red-600">Error</h2>
-        <p>{error}</p>
-        <button 
-          onClick={() => window.location.href = '/'} 
-          className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded"
-        >
-          Go to Homepage
-        </button>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">URL Not Found</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button 
+            onClick={() => window.location.href = '/'} 
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+          >
+            Go to Homepage
+          </button>
+        </div>
       </div>
     )
   }
 
-  return (
-    <div className="max-w-md mx-auto mt-12 bg-white p-6 rounded shadow text-center">
-      <h2 className="text-2xl font-semibold mb-4">Redirecting...</h2>
-      <p>Please wait while we redirect you to the original URL.</p>
-      <div className="mt-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Redirecting...</h2>
+          <p className="text-gray-600 mb-6">Please wait while we redirect you to the original URL.</p>
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return null
 }

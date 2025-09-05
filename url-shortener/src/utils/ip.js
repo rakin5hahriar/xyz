@@ -10,8 +10,8 @@ export function getClientIp(req) {
   
   // For local development, use a public IP for testing
   if (ip === '127.0.0.1' || ip === 'localhost' || ip === '::1' || !ip) {
-    // Use a sample IP for testing (Google's public DNS)
-    ip = '8.8.8.8';
+    // Use a Bangladesh IP for testing (Grameenphone public IP)
+    ip = '203.112.218.1';
   }
   
   return ip;

@@ -9,7 +9,7 @@ export default function Login(){
   const [err, setErr] = useState('')
   const navigate = useNavigate()
   const { login } = useAuth()
-  const api = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
+  const api = import.meta.env.VITE_API_BASE || 'http://localhost:5000'
 
   const submit = async (e) => {
     e.preventDefault()
@@ -24,15 +24,65 @@ export default function Login(){
   }
 
   return (
-    <div className="max-w-md mx-auto mt-12 bg-white p-6 rounded shadow">
-      <h2 className="text-2xl font-semibold mb-4">Login</h2>
-      <form onSubmit={submit} className="space-y-3">
-        {err && <div className="text-red-600">{err}</div>}
-        <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="w-full p-2 border rounded" />
-        <input value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" type="password" className="w-full p-2 border rounded" />
-        <button className="w-full bg-indigo-600 text-white p-2 rounded">Login</button>
-      </form>
-      <p className="mt-3 text-sm">Don't have an account? <Link to="/register" className="text-indigo-600">Register</Link></p>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
+          <p className="text-gray-600 mt-2">Sign in to your account</p>
+        </div>
+        
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <form onSubmit={submit} className="space-y-6">
+            {err && (
+              <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">
+                {err}
+              </div>
+            )}
+            
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Email
+              </label>
+              <input 
+                value={email} 
+                onChange={e=>setEmail(e.target.value)} 
+                placeholder="Enter your email" 
+                type="email"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Password
+              </label>
+              <input 
+                value={password} 
+                onChange={e=>setPassword(e.target.value)} 
+                placeholder="Enter your password" 
+                type="password" 
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                required
+              />
+            </div>
+            
+            <button 
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-medium transition-colors"
+            >
+              Sign In
+            </button>
+          </form>
+          
+          <p className="mt-6 text-center text-gray-600 text-sm">
+            Don't have an account?{' '}
+            <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
+              Create one
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

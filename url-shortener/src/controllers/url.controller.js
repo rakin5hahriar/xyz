@@ -128,30 +128,10 @@ export async function redirectByCode(req, res) {
   res.redirect(302, url.originalUrl);
 }
 
-export async function getRedirectUrl(req, res) {
+export async function getUrlInfo(req, res) {
   const { code } = req.params;
   const url = await Url.findOne({ shortCode: code });
   if (!url) return res.status(404).json({ message: 'Short URL not found' });
-
-  const ip = getClientIp(req);
-  const location = getLocationFromIp(ip);
-  const userAgent = req.headers['user-agent'] || '';
-  const { device, browser, os } = parseUserAgent(userAgent);
-  const referer = req.headers['referer'] || req.headers['referrer'] || '';
   
-  await Click.create({ 
-    url: url._id, 
-    ip, 
-    country: location.country,
-    city: location.city,
-    userAgent, 
-    device,
-    browser,
-    os,
-    referer, 
-    at: new Date() 
-  });
-  await Url.updateOne({ _id: url._id }, { $inc: { clicksCount: 1 } });
-
-  res.json({ originalUrl: url.originalUrl });
+  res.json({ originalUrl: url.originalUrl, shortCode: url.shortCode });
 }

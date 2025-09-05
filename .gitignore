@@ -64,3 +64,55 @@ docker-compose.override.yml
 # Deployment
 .vercel
 .netlify
+.firebase
+.gcloud
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# JWT secrets and sensitive files
+*.pem
+*.key
+secrets/
+
+# Testing
+test-results/
+playwright-report/
+
+# Build artifacts
+*.tgz
+*.tar.gz
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# TypeScript
+*.tsbuildinfo
+*.d.ts
+
+# ESLint
+.eslintcache
+
+# MongoDB
+*.mongorc.js
+
+# Analytics and monitoring
+.newrelic
+
+# Local development
+.local
+*.local
+
+# Generated files
+generated/
+auto-generated/
+
+# Debug files
+debug.log
+error.log
+access.log
